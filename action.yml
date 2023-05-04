@@ -10,14 +10,11 @@ inputs:
     description: "Contents of a Service Account JSON Key"
     required: true
   registry:
-    description: "Registry host name (must match dst image)" 
+    description: "Registry host name (must match image)"
     required: false
     default: "gcr.io"
-  src:
-    description: "Source image name"
-    required: true
-  dst:
-    description: "Destination image name"
+  image:
+    description: "Image name"
     required: true
 
 runs:
@@ -27,7 +24,5 @@ runs:
       shell: bash
       run: |
         docker login -u _json_key -p '${{ inputs.creds }}' 'https://${{ inputs.registry }}' 2>/dev/null
-        docker tag '${{ inputs.src }}' '${{ inputs.dst }}'
-        docker push '${{ inputs.dst }}'
-        echo "Successfully pushed ${{ inputs.src }} to ${{ inputs.dst }}"
-
+        docker push '${{ inputs.image }}' --all-tags
+        echo "Successfully pushed ${{ inputs.image }}"
