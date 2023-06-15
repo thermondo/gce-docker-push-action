@@ -6,8 +6,12 @@ branding:
   color: "red"
 
 inputs:
+  username:
+    description: "Registry username"
+    required: false
+    default: "_json_key"
   creds:
-    description: "Contents of a Service Account JSON Key"
+    description: "Registry password"
     required: true
   registry:
     description: "Registry host name (must match image)"
@@ -23,6 +27,6 @@ runs:
     - name: Push to Google Cloud Container Registry
       shell: bash
       run: |
-        docker login -u _json_key -p '${{ inputs.creds }}' 'https://${{ inputs.registry }}' 2>/dev/null
+        docker login --username '${{ inputs.username }}' --password '${{ inputs.creds }}' 'https://${{ inputs.registry }}' 2>/dev/null
         docker push '${{ inputs.image }}' --all-tags
         echo "Successfully pushed ${{ inputs.image }}"
